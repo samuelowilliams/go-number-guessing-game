@@ -54,7 +54,7 @@ func gameLogic(difficulty string) {
 	randomNumber := generateRandomNumber()
 	var t1 time.Time
 	var t2 time.Time
-	var timeTaken string
+	var timeFormat time.Time
 	fmt.Printf("Great! You have selected the %s difficulty level.\n", difficulty)
 	fmt.Println("Let's start the game!")
 	fmt.Println()
@@ -76,9 +76,11 @@ func gameLogic(difficulty string) {
 
 		if guessedNumber == randomNumber {
 			t2 = time.Now()
-			timeTaken = t2.Sub(t1).String()
+			timeTaken := t2.Sub(t1)
+			timeFormat = time.Time{}.Add(timeTaken)
+
 			fmt.Printf("Congratulations! You guessed the correct number in %d attempts\n", attempts)
-			fmt.Println("Time Taken: ", timeTaken)
+			fmt.Println("Time Taken: ", timeFormat.Format("15:04:05"))
 			return
 		}
 
@@ -92,9 +94,11 @@ func gameLogic(difficulty string) {
 
 	}
 	t2 = time.Now()
-	timeTaken = t2.Sub(t1).String()
+	timeTaken := t2.Sub(t1)
+	timeFormat = time.Time{}.Add(timeTaken)
+
 	fmt.Printf("The correct number was %d\n", randomNumber)
-	fmt.Println("Time Taken: ", timeTaken)
+	fmt.Println("Time Taken: ", timeFormat.Format("15:04:05"))
 }
 
 func startGame() {
