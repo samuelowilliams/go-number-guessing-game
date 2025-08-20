@@ -89,9 +89,27 @@ func gameLogic(difficulty string) {
 }
 
 func startGame() {
+	playing := true
+	var playAgain int
 	displayStartUpMessage()
-	difficulty := selectDifficulty()
-	gameLogic(difficulty)
+	for playing {
+		difficulty := selectDifficulty()
+		gameLogic(difficulty)
+		fmt.Println("New Game: Try Again.")
+		fmt.Println("1. Yes")
+		fmt.Println("2. No")
+		fmt.Print("Enter your choice(1,2): ")
+		fmt.Scanf("%d", &playAgain)
+		if playAgain == 1 {
+			playing = true
+			fmt.Println("New Game...")
+		}
+
+		if playAgain == 2 {
+			playing = false
+		}
+
+	}
 }
 
 func main() {
