@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand/v2"
+)
 
 func displayStartUpMessage() {
 	fmt.Println("Welcome to the Number Guessing Game!")
@@ -8,7 +11,20 @@ func displayStartUpMessage() {
 	fmt.Println("Select game difficaulty to begin.")
 }
 
-func startGame() { displayStartUpMessage() }
+func generateRandomNumber() int {
+	var randomNumber int
+	randomNumber = rand.IntN(100)
+	for randomNumber <= 1 {
+		randomNumber = rand.IntN(100)
+	}
+	return randomNumber
+}
+
+func startGame() {
+	displayStartUpMessage()
+	fmt.Println(generateRandomNumber())
+}
+
 func main() {
 	startGame()
 }
