@@ -8,7 +8,7 @@ import (
 func displayStartUpMessage() {
 	fmt.Println("Welcome to the Number Guessing Game!")
 	fmt.Println("I'm thinking of a number between 1 and 100.")
-	fmt.Println("Select game difficaulty to begin.")
+	fmt.Println("Select game difficulty to begin.")
 }
 
 func generateRandomNumber() int {
@@ -20,9 +20,78 @@ func generateRandomNumber() int {
 	return randomNumber
 }
 
+func selectDifficulty() string {
+	var choice int
+	fmt.Println("Please select the difficulty level:")
+	fmt.Println("1. Easy (10 chances)")
+	fmt.Println("2. Medium (5 chances)")
+	fmt.Println("3. Hard (3 chances)")
+	fmt.Println()
+	fmt.Print("Enter your choice: ")
+	fmt.Scanf("%d", &choice)
+	fmt.Println("User's choice: ", choice)
+
+	for choice != 1 && choice != 2 && choice != 3 {
+		fmt.Println("You selected a difficulty that does not exist. Please try again.")
+		fmt.Print("Enter your choice: ")
+		fmt.Scanf("%d", &choice)
+	}
+
+	if choice == 3 {
+		return "Hard"
+	}
+	if choice == 2 {
+		return "Medium"
+	}
+	return "Easy"
+}
+
+func gameLogic(difficulty string) {
+	var chances int
+	var guessedNumber int
+	attempts := 0
+	randomNumber := generateRandomNumber()
+	fmt.Printf("Great! You have selected the %s difficulty level.\n", difficulty)
+	fmt.Println("Let's start the game!")
+	fmt.Println()
+
+	switch difficulty {
+	case "Easy":
+		chances = 10
+	case "Medium":
+		chances = 5
+	case "Hard":
+		chances = 3
+	}
+
+	for chances > 0 {
+		fmt.Print("Enter your guess: ")
+		fmt.Scanf("%d", &guessedNumber)
+
+		attempts++
+		chances--
+
+		if guessedNumber == randomNumber {
+			fmt.Printf("Congratulations! You guessed the correct number in %d attempts\n", attempts)
+			return
+		}
+
+		if randomNumber > guessedNumber {
+			fmt.Printf("Incorrect! The number is greater than %d.\n", guessedNumber)
+		}
+
+		if randomNumber < guessedNumber {
+			fmt.Printf("Incorrect! The number is lesser than %d.\n", guessedNumber)
+		}
+
+	}
+	fmt.Printf("The correct number was %d\n", randomNumber)
+}
+
 func startGame() {
 	displayStartUpMessage()
-	fmt.Println(generateRandomNumber())
+	difficulty := selectDifficulty()
+	gameLogic(difficulty)
 }
 
 func main() {
