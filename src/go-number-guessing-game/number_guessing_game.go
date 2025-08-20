@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
+	"time"
 )
 
 func displayStartUpMessage() {
@@ -51,6 +52,9 @@ func gameLogic(difficulty string) {
 	var guessedNumber int
 	attempts := 0
 	randomNumber := generateRandomNumber()
+	var t1 time.Time
+	var t2 time.Time
+	var timeTaken string
 	fmt.Printf("Great! You have selected the %s difficulty level.\n", difficulty)
 	fmt.Println("Let's start the game!")
 	fmt.Println()
@@ -63,16 +67,18 @@ func gameLogic(difficulty string) {
 	case "Hard":
 		chances = 3
 	}
-
+	t1 = time.Now()
 	for chances > 0 {
 		fmt.Print("Enter your guess: ")
 		fmt.Scanf("%d", &guessedNumber)
-
 		attempts++
 		chances--
 
 		if guessedNumber == randomNumber {
+			t2 = time.Now()
+			timeTaken = t2.Sub(t1).String()
 			fmt.Printf("Congratulations! You guessed the correct number in %d attempts\n", attempts)
+			fmt.Println("Time Taken: ", timeTaken)
 			return
 		}
 
@@ -85,7 +91,10 @@ func gameLogic(difficulty string) {
 		}
 
 	}
+	t2 = time.Now()
+	timeTaken = t2.Sub(t1).String()
 	fmt.Printf("The correct number was %d\n", randomNumber)
+	fmt.Println("Time Taken: ", timeTaken)
 }
 
 func startGame() {
