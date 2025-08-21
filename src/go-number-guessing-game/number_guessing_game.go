@@ -22,8 +22,8 @@ func checkFile() {
 		if err != nil {
 			panic(err)
 		}
-		highscore := Highscore{}
-		dataBytes, err := json.Marshal(highscore)
+		highscores := Highscore{}
+		dataBytes, err := json.Marshal(highscores)
 		if err != nil {
 			panic(err)
 		}
@@ -32,6 +32,21 @@ func checkFile() {
 			panic(err)
 		}
 	}
+}
+
+func loadHighscores() Highscore {
+	filename := "highscore.json"
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	var highscores Highscore
+
+	err = json.Unmarshal(file, &highscores)
+	if err != nil {
+		panic(err)
+	}
+	return highscores
 }
 
 func displayStartUpMessage() {
@@ -133,6 +148,10 @@ func startGame() {
 	playing := true
 	var playAgain int
 	checkFile()
+	highscores := loadHighscores()
+
+	fmt.Println("Loaded Highscores")
+	fmt.Println(highscores)
 	displayStartUpMessage()
 	for playing {
 		difficulty := selectDifficulty()
