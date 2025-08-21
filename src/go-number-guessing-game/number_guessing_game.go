@@ -1,10 +1,38 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand/v2"
+	"os"
 	"time"
 )
+
+type Highscore struct {
+	Easy   int
+	Medium int
+	Hard   int
+}
+
+func checkFile() {
+	filename := "highscore.json"
+	_, err := os.Stat(filename)
+	if err != nil {
+		_, err := os.Create(filename)
+		if err != nil {
+			panic(err)
+		}
+		highscore := Highscore{}
+		dataBytes, err := json.Marshal(highscore)
+		if err != nil {
+			panic(err)
+		}
+		err = os.WriteFile(filename, dataBytes, 0666)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
 
 func displayStartUpMessage() {
 	fmt.Println("Welcome to the Number Guessing Game!")
@@ -104,6 +132,7 @@ func gameLogic(difficulty string) {
 func startGame() {
 	playing := true
 	var playAgain int
+	checkFile()
 	displayStartUpMessage()
 	for playing {
 		difficulty := selectDifficulty()
