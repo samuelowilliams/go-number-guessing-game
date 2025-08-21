@@ -34,6 +34,18 @@ func checkFile() {
 	}
 }
 
+func updateHighscore(highscore Highscore) {
+	filename := "highscore.json"
+	dataBytes, err := json.Marshal(highscore)
+	if err != nil {
+		panic(err)
+	}
+	err = os.WriteFile(filename, dataBytes, 0666)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func loadHighscores() Highscore {
 	filename := "highscore.json"
 	file, err := os.ReadFile(filename)
@@ -90,11 +102,12 @@ func selectDifficulty() string {
 	return "Easy"
 }
 
-func gameLogic(difficulty string) {
+func gameLogic(difficulty string, highscores Highscore) {
 	var chances int
 	var guessedNumber int
 	attempts := 0
 	randomNumber := generateRandomNumber()
+	fmt.Println("The randomNumber", randomNumber)
 	var t1 time.Time
 	var t2 time.Time
 	var timeFormat time.Time
@@ -121,6 +134,43 @@ func gameLogic(difficulty string) {
 			t2 = time.Now()
 			timeTaken := t2.Sub(t1)
 			timeFormat = time.Time{}.Add(timeTaken)
+
+			switch difficulty {
+			case "Easy":
+				if highscores.Easy == 0 {
+					highscores.Easy = attempts
+					updateHighscore(highscores)
+				} else {
+					if highscores.Easy > attempts {
+						fmt.Printf("Ding Ding Ding : New Highscore on Easy Ddifficulty: %d attempts\n", attempts)
+						highscores.Easy = attempts
+						updateHighscore(highscores)
+					}
+				}
+
+			case "Medium":
+				if highscores.Medium == 0 {
+					highscores.Medium = attempts
+					updateHighscore(highscores)
+				} else {
+					if highscores.Medium > attempts {
+						fmt.Printf("Ding Ding Ding : New Highscore on Medium Ddifficulty: %d attempts\n", attempts)
+						highscores.Medium = attempts
+						updateHighscore(highscores)
+					}
+				}
+			case "Hard":
+				if highscores.Hard == 0 {
+					updateHighscore(highscores)
+					highscores.Hard = attempts
+				} else {
+					if highscores.Hard > attempts {
+						fmt.Printf("Ding Ding Ding : New Highscore on Hard Ddifficulty: %d attempts\n", attempts)
+						updateHighscore(highscores)
+						highscores.Hard = attempts
+					}
+				}
+			}
 
 			fmt.Printf("Congratulations! You guessed the correct number in %d attempts\n", attempts)
 			fmt.Println("Time Taken: ", timeFormat.Format("15:04:05"))
@@ -155,7 +205,7 @@ func startGame() {
 	displayStartUpMessage()
 	for playing {
 		difficulty := selectDifficulty()
-		gameLogic(difficulty)
+		gameLogic(difficulty, highscores)
 		fmt.Println("New Game: Try Again.")
 		fmt.Println("1. Yes")
 		fmt.Println("2. No")
