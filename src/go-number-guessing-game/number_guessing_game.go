@@ -69,10 +69,8 @@ func displayStartUpMessage() {
 
 func generateRandomNumber() int {
 	var randomNumber int
-	randomNumber = rand.IntN(100)
-	for randomNumber <= 1 {
-		randomNumber = rand.IntN(100)
-	}
+	randomNumber = rand.IntN(99) + 1
+
 	return randomNumber
 }
 
