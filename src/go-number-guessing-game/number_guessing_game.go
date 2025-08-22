@@ -164,8 +164,8 @@ func gameLogic(difficulty string, highscores Highscore) {
 				} else {
 					if highscores.Hard > attempts {
 						fmt.Printf("Ding Ding Ding : New Highscore on Hard Ddifficulty: %d attempts\n", attempts)
-						updateHighscore(highscores)
 						highscores.Hard = attempts
+						updateHighscore(highscores)
 					}
 				}
 			}
